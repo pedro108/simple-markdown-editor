@@ -1,11 +1,10 @@
 import { act, fireEvent, render } from '@testing-library/react';
 import App from './App';
 import markdownEngine from '../engine/markdown.engine';
-import { getMarkdownCache, setMarkdownCache } from '../cache/markdown.cache';
 
 describe('<App/>', () => {
   beforeEach(() => {
-    setMarkdownCache("");
+    window.localStorage.clear();
   });
 
   it('Matches DOM snapshot', () => {
@@ -70,7 +69,7 @@ describe('<App/>', () => {
   it('Reads from localStorage cache when rendering the editor for the first time', () => {
     const markdownValue = "#Title\n##Lorem ipsum dolor.";
     const expectedResult = markdownEngine.render(markdownValue);
-    setMarkdownCache(markdownValue);
+    window.localStorage.setItem("markdown-cache", markdownValue);
 
     const { getByTestId } = render(<App />);
 
@@ -91,6 +90,6 @@ describe('<App/>', () => {
       fireEvent.click(button);
     });
 
-    expect(getMarkdownCache()).toEqual(markdownValue);
+    expect(window.localStorage.getItem("markdown-cache")).toEqual(markdownValue);
   });
 });
