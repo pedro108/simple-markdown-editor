@@ -1,8 +1,13 @@
 import { act, fireEvent, render } from '@testing-library/react';
 import App from './App';
 import markdownEngine from '../engine/markdown.engine';
+import { getMarkdownCache, setMarkdownCache } from '../cache/markdown.cache';
 
 describe('<App/>', () => {
+  beforeEach(() => {
+    setMarkdownCache("");
+  });
+
   it('Matches DOM snapshot', () => {
     const { asFragment } = render(<App />);
 
@@ -43,14 +48,49 @@ describe('<App/>', () => {
   });
 
   it('Renders markdown automatically if live render toggled is checked', () => {
+    const { getByTestId } = render(<App />);
+    const markdownValue = "#Title\n##Lorem ipsum dolor.";
+    const expectedResult = markdownEngine.render(markdownValue);
 
+    const editor = getByTestId("editor");
+    const result = getByTestId("editor-result");
+    const liveRenderToggle = getByTestId("live-render-toggle");
+
+    act(() => {
+      fireEvent.click(liveRenderToggle);
+    });
+
+    act(() => {
+      fireEvent.change(editor, { target: { value: markdownValue } });
+    });
+
+    expect(result.innerHTML).toEqual(expectedResult);
   });
 
   it('Reads from localStorage cache when rendering the editor for the first time', () => {
+    const markdownValue = "#Title\n##Lorem ipsum dolor.";
+    const expectedResult = markdownEngine.render(markdownValue);
+    setMarkdownCache(markdownValue);
 
+    const { getByTestId } = render(<App />);
+
+    const result = getByTestId("editor-result");
+
+    expect(result.innerHTML).toEqual(expectedResult);    
   });
 
-  it('Updated the localStorage cache when markdown is changed', () => {
+  it('Updates the localStorage cache when markdown is changed', () => {
+    const { getByTestId } = render(<App />);
+    const markdownValue = "#Title\n##Lorem ipsum dolor.";
 
+    const editor = getByTestId("editor");
+    const button = getByTestId("render-button");
+
+    act(() => {
+      fireEvent.change(editor, { target: { value: markdownValue } });
+      fireEvent.click(button);
+    });
+
+    expect(getMarkdownCache()).toEqual(markdownValue);
   });
 });
