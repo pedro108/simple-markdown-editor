@@ -18,7 +18,7 @@ exports[`<App/> Matches DOM snapshot 1`] = `
       />
     </div>
     <div
-      class="sc-hfDuwB gpeogC"
+      class="sc-hfDuwB kkTnSy"
     >
       <button
         class="sc-fBEEOr jhYYDd"
@@ -28,6 +28,13 @@ exports[`<App/> Matches DOM snapshot 1`] = `
         Render
       </button>
     </div>
+    <label>
+      <input
+        data-testid="live-render-toggle"
+        type="checkbox"
+      />
+      Live render
+    </label>
   </div>
 </DocumentFragment>
 `;

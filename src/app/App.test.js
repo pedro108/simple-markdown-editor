@@ -25,5 +25,20 @@ describe('<App/>', () => {
 
     expect(result.innerHTML).toEqual(expectedResult);
   });
-});
 
+  it('Removes the render button if the live render toggle is checked', () => {
+    const { getByTestId } = render(<App />);
+
+    const liveRenderToggle = getByTestId("live-render-toggle");
+
+    expect(liveRenderToggle.checked).toBe(false);
+    expect(getByTestId("render-button")).toBeTruthy();
+
+    act(() => {
+      fireEvent.click(liveRenderToggle);
+    });
+
+    expect(liveRenderToggle.checked).toBe(true);
+    expect(() => getByTestId("render-button")).toThrow();
+  });
+});

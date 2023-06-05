@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import EditorButtons from "./components/EditorButtons";
+import EditorCheckbox from "./components/EditorCheckbox";
 import EditorContainer from "./components/EditorContainer";
 import EditorPrimaryButton from "./components/EditorPrimaryButton";
 import EditorWrapper from "./components/EditorWrapper";
@@ -10,6 +11,7 @@ import markdownEngine from "../engine/markdown.engine";
 function App() {
   const [markdown, setMarkdown] = useState("");
   const [result, setResult] = useState("");
+  const [liveRender, setLiveRender] = useState(false);
 
   const handleChangeMarkdown = useCallback((e) => {
     setMarkdown(e.target.value);
@@ -18,6 +20,16 @@ function App() {
   const handleRenderButton = useCallback(() => {
     setResult(markdownEngine.render(markdown));
   });
+
+  const toggleLiveRender = useCallback(() => {
+    setLiveRender(!liveRender);
+  }, [liveRender, setLiveRender]);
+
+  useEffect(() => {
+    if(liveRender) {
+      setResult(markdownEngine.render(markdown));
+    }
+  }, [markdown, liveRender]);
 
   return (
     <EditorContainer>
@@ -35,12 +47,20 @@ function App() {
         />
       </EditorWrapper>
       <EditorButtons>
-        <EditorPrimaryButton
+        {!liveRender && (
+          <EditorPrimaryButton
           type="button"
           onClick={handleRenderButton}
           data-testid="render-button"
         >Render</EditorPrimaryButton>
+        )}
       </EditorButtons>
+      <EditorCheckbox
+        label="Live render"
+        value={liveRender}
+        onChange={toggleLiveRender}
+        testId="live-render-toggle"
+      />
     </EditorContainer>
   );
 }
