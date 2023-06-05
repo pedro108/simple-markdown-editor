@@ -5,6 +5,8 @@ import EditorContainer from "./components/EditorContainer";
 import EditorPrimaryButton from "./components/EditorPrimaryButton";
 import EditorWrapper from "./components/EditorWrapper";
 
+import markdownEngine from "../engine/markdown.engine";
+
 function App() {
   const [markdown, setMarkdown] = useState("");
   const [result, setResult] = useState("");
@@ -14,7 +16,7 @@ function App() {
   }, [setMarkdown]);
 
   const handleRenderButton = useCallback(() => {
-    setResult(markdown);
+    setResult(markdownEngine.render(markdown));
   });
 
   return (
@@ -29,9 +31,8 @@ function App() {
         <div
           className="editor__result"
           data-testid="editor-result"
-        >
-          {result}
-        </div>
+          dangerouslySetInnerHTML={{__html: result}}
+        />
       </EditorWrapper>
       <EditorButtons>
         <EditorPrimaryButton

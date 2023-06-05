@@ -1,5 +1,6 @@
-import { fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import App from './App';
+import markdownEngine from '../engine/markdown.engine';
 
 describe('<App/>', () => {
   it('Matches DOM snapshot', () => {
@@ -8,19 +9,21 @@ describe('<App/>', () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('Copies the result from the editor to the result box when Render button is clicked', () => {
+  it('Parses the result from the markdown editor to the result box when Render button is clicked', () => {
     const { getByTestId } = render(<App />);
-    const testValue = "Lorem ipsum dolor.";
+    const markdownValue = "#Title\n##Lorem ipsum dolor.";
+    const expectedResult = markdownEngine.render(markdownValue);
 
     const editor = getByTestId("editor");
     const result = getByTestId("editor-result");
     const button = getByTestId("render-button");
 
-    fireEvent.change(editor, { target: { value: testValue } });
-    fireEvent.click(button);
+    act(() => {
+      fireEvent.change(editor, { target: { value: markdownValue } });
+      fireEvent.click(button);
+    });
 
-    console.log(result.innerHTML);
-    expect(result.innerHTML).toEqual(testValue);
+    expect(result.innerHTML).toEqual(expectedResult);
   });
 });
 
