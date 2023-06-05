@@ -7,10 +7,11 @@ import EditorPrimaryButton from "./components/EditorPrimaryButton";
 import EditorWrapper from "./components/EditorWrapper";
 
 import markdownEngine from "../engine/markdown.engine";
+import { getMarkdownCache, setMarkdownCache } from "../cache/markdown.cache";
 
 function App() {
-  const [markdown, setMarkdown] = useState("");
-  const [result, setResult] = useState("");
+  const [markdown, setMarkdown] = useState(getMarkdownCache());
+  const [result, setResult] = useState(markdownEngine.render(markdown));
   const [liveRender, setLiveRender] = useState(false);
 
   const handleChangeMarkdown = useCallback((e) => {
@@ -30,6 +31,10 @@ function App() {
       setResult(markdownEngine.render(markdown));
     }
   }, [markdown, liveRender]);
+
+  useEffect(() => {
+    setMarkdownCache(markdown);
+  }, [markdown]);
 
   return (
     <EditorContainer>
