@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App/> Matches DOM snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-jCIOXC cClzMa"
+  >
+    <div
+      class="sc-dBwcjI hsOSVc"
+    >
+      <textarea
+        class="editor__editor"
+        data-testid="editor"
+      />
+      <div
+        class="editor__result"
+        data-testid="editor-result"
+      />
+    </div>
+    <div
+      class="sc-hfDuwB gpeogC"
+    >
+      <button
+        class="sc-fBEEOr jhYYDd"
+        data-testid="render-button"
+        type="button"
+      >
+        Render
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
