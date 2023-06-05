@@ -41,4 +41,16 @@ describe('<App/>', () => {
     expect(liveRenderToggle.checked).toBe(true);
     expect(() => getByTestId("render-button")).toThrow();
   });
+
+  it('Renders markdown automatically if live render toggled is checked', () => {
+
+  });
+
+  it('Reads from localStorage cache when rendering the editor for the first time', () => {
+
+  });
+
+  it('Updated the localStorage cache when markdown is changed', () => {
+
+  });
 });
